@@ -739,6 +739,7 @@ function DiggSource() {
 
         cursors: 0,
         current: -1,
+        buried: [],
 
         init: function() {
             if (!document.getElementById('sub-nav')) {
@@ -769,10 +770,22 @@ function DiggSource() {
             shortcutListener.init();
         },
 
+        isBuried: function(index) {
+            for (var i=0;i<this.buried.length;i++) {
+                if (index == this.buried[i]) return true;
+            }
+            return false;
+        },
+
         next: function() {
             var i = this.current + 1;
             if (i >= this.cursors) {
                 this.goPage('next');
+            }
+            if (this.isBuried(i)) {
+                this.showCursor(i);
+                this.next();
+                return;
             }
             this.showCursor(i);
         },
@@ -782,6 +795,11 @@ function DiggSource() {
             if (i < 0) {
                 this.goPage('previous');
             };    
+            if (this.isBuried(i)) {
+                this.showCursor(i);
+                this.previous();
+                return;
+            }
             this.showCursor(i);
         },
 
@@ -875,9 +893,29 @@ function DiggSource() {
             } else {
                 var li = document.getElementById('diglink'+this.current);
                 var a = li.getElementsByTagName('a')[0];
+                if (!a) return false;
                 var href = a.getAttribute('href');
                 var code = href.substring(11);
                 eval(code);
+            };
+        },
+
+        bury: function() {
+            if (!this.isLoggedIn()) {
+                poppr(this.current);
+            } else {
+                var div = document.getElementById('burytool'+this.current);
+                if (!div) return false;
+                var diglink = document.getElementById('diglink'+this.current);
+                if (diglink && (diglink.className == 'buried-it')) {
+                    return false;
+                }
+                var a = div.getElementsByTagName('a')[0];
+                var href = a.getAttribute('href');
+                var code = href.substring(11);
+                eval(code);
+                this.buried.push(this.current);
+                this.next();
             };
         },
 
@@ -944,7 +982,8 @@ function DiggSource() {
         'u': function() { Cursor.back();},
 
         'v': {
-            'u': function() { Cursor.digg();}
+            'u': function() { Cursor.digg();},
+            'd': function() { Cursor.bury();}
         }
 
     }

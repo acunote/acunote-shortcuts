@@ -8,6 +8,7 @@
     <em:creator>Pluron, Inc.</em:creator>
     <em:description>Adds cursor and keyboard shortcuts for news.ycombinator.com, reddit.com, and digg.com</em:description>
     <em:homepageURL>http://www.acunote.com/open-source/javascript-keyboard-shortcuts</em:homepageURL>
+    <em:updateURL>http://www.acunote.com/files/update.rdf</em:updateURL>
     <em:targetApplication>
       <Description>
         <em:id>{ec8030f7-c20a-464f-9b0e-13a3a9e97384}</em:id> <!-- firefox -->

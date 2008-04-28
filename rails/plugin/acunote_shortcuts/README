@@ -1,0 +1,56 @@
+Acunote Javascript Keyboard Shortcuts Mini-Framework
+====================================================
+
+With this mini-framework it takes only a few lines of code to empower your web
+site or application with keyboard shortcuts. The framework supports both 
+single-key and combo-key shortcuts just like Gmail and other Google applications.
+
+We extracted the code from our production appplcation - Acunote, agile 
+project management system written in Ruby on Rails. 
+
+
+Features
+
+* Supports single and combo-key shortcuts.
+* Shortcut key sequence length is unlimited.
+* All keys except for those which require modifiers (ctrl, alt, shift, 
+  command, etc.) are allowed as shortcuts.
+  For example "foo" or "/" are valid shortcuts because you can type all 
+  symbols by single keypress, but "Foo" or "?" won't work because you have 
+  to press Shift to type their symbols.
+* Works in Mozilla Firefox 1+, Internet Explorer 6+, Opera 8+, Safari, Konqueror.
+* Does not depend on any javascript library.
+
+
+INSTALLATION
+
+1) Download the plugin
+
+2) Update your application javascripts and stylesheets with:
+
+    rake acunote_shortcuts:install
+
+3) In your application layout add:
+
+    <%= stylesheet_link_tag 'acunote-shortcuts' %>
+    <%= javascript_include_tag 'acunote-shortcuts' %>
+
+4) Add onload event handler for HTML BODY element:
+
+    <body onload="<%=init_shortcuts%>">
+
+5) Configure global shortcuts in the layout:
+
+    <% @global_shortcuts = { :h => "alert('Help!');" } %>
+
+6) Configure local page shortcuts in the page template:
+
+    <% @page_shortcuts = { :t => "alert('Test');" } %>
+
+7) Call render shortcuts somewhere in the layout (preferably in the <head>):
+
+    <%= render_shortcuts %>
+
+8) Enjoy!
+
+    Run the application and press 'h' or 't' keys

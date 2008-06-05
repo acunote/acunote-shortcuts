@@ -8,7 +8,7 @@
  *  Adds keyboard navigation for:
  *  Reddit           http://reddit.com
  *  Digg             http://digg.com
- *  YCombinator News http://news.ycombinator.com
+ *  YCombinator News http://news.ycombinator.org
  *
  *  Shortcuts Library Copyright (c) 2007-2008 Pluron, Inc.
  *  Reddit, Digg and YCNews Scripts Copyright (c) 2008 Pluron, Inc.
@@ -39,8 +39,10 @@
 // ==UserScript==
 // @name          Acunote Shortcuts
 // @description   Adds cursor and keyboard shortcuts for news.ycombinator.com, reddit.com, and digg.com
+// @include       http://news.ycombinator.org*
 // @include       http://news.ycombinator.com*
 // @include       http://reddit.com*
+// @include       http://www.reddit.com*
 // @include       http://digg.com*
 // @include       http://www.digg.com*
 // @include       http://example.com*

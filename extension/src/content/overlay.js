@@ -8,7 +8,7 @@
  *  Adds keyboard navigation for:
  *  Reddit           http://reddit.com
  *  Digg             http://digg.com
- *  YCombinator News http://news.ycombinator.com
+ *  YCombinator News http://news.ycombinator.org
  *
  *  Shortcuts Library Copyright (c) 2007-2008 Pluron, Inc.
  *  Reddit, Digg and YCNews Scripts Copyright (c) 2008 Pluron, Inc.
@@ -1002,6 +1002,7 @@ function DummySource() {
  */
 var SupportedSites = {
     'news.ycombinator.com/': YCombinatorSource,
+    'news.ycombinator.org/': YCombinatorSource,
     'reddit.com/':           RedditSource,
     'digg.com/':             DiggSource,
     'example.com/':          DummySource

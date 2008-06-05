@@ -271,13 +271,6 @@ function RedditSource() {
         '\n=== Voting ===\n' +
         'v u - vote up\n' +
         'v d - vote down\n' +
-        '\n=== Browsing ===\n' +
-        'g h - open "hot" page\n' +
-        'g n - open "new" page\n' +
-        'g b - open "browse" page\n' +
-        'g s - open "saved" page\n' +
-        'g r - open "recommended" page\n' +
-        'g t - open "stats" page\n' +
         '\n=== Other ===\n' +
         '? - this help\n';
 
@@ -477,14 +470,6 @@ function RedditSource() {
         'v': {
             'u': function() { Cursor.voteUp(); },
             'd': function() { Cursor.voteDown(); },
-        },
-        'g': {
-            'h': function() { Cursor.go('hot'); },
-            'n': function() { Cursor.go('new'); },
-            'b': function() { Cursor.go('browse'); },
-            's': function() { Cursor.go('saved'); },
-            'r': function() { Cursor.go('recommended'); },
-            't': function() { Cursor.go('stats'); }
         }
     }
 }

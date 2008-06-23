@@ -118,9 +118,7 @@ function ShortcutsSource() {
                 if (targetNodeName == "textarea" || targetNodeName == "select" ||
                     (targetNodeName == "input" && target.type &&
                         (target.type.toLowerCase() == "text" ||
-                            target.type.toLowerCase() == "password" ||
-                            target.type.toLowerCase() == "checkbox" ||
-                            target.type.toLowerCase() == "radio"))
+                            target.type.toLowerCase() == "password"))
                                 )  {
                     return true;
                 }

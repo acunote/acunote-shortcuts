@@ -8,7 +8,7 @@
  *  Adds keyboard navigation for:
  *  Reddit           http://reddit.com
  *  Digg             http://digg.com
- *  YCombinator News http://news.ycombinator.org
+ *  YCombinator News http://news.ycombinator.com
  *
  *  Shortcuts Library Copyright (c) 2007-2008 Pluron, Inc.
  *  Reddit, Digg and YCNews Scripts Copyright (c) 2008 Pluron, Inc.

@@ -52,7 +52,7 @@
 var w = null;
 //It is not necessary to use unsafeWindow for non-Firefox browsers
 //Opera & WebKit/Safari provide full access to window object;
-if (unsafeWindow) {
+if (typeof unsafeWindow !== 'undefined') {
     w = unsafeWindow;
 } else {
     w = window;

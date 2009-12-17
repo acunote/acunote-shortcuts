@@ -282,16 +282,10 @@ function RedditSource() {
 
             if (this.siteTable) {
                 this.siteTablePos = this.findPos(this.siteTable);
-                var row = this.siteTable.firstChild;
-                if (row) {
-                    do {
-                        if (row.id.match('thingrow_.*')) {
-                            this.things.push(row);
-                        }
-                    } while (row = row.nextSibling);
-
+                this.things = document.querySelectorAll('#siteTable .thing');
+                if (this.things) {
                     this.current = 0;
-                    if (readCookie('jumpToLast')) {
+                    if (typeof readCookie !== 'undefined' && readCookie('jumpToLast')) {
                         this.showCursor(this.things.length - 1);
                         createCookie('jumpToLast', '0', -1);
                     } else
@@ -329,81 +323,80 @@ function RedditSource() {
         },
 
         prevOrNextPage: function(mode, setCursorToLastPosition) {
-            var element = this.siteTable.nextSibling.firstChild;
-            while (element && element.innerHTML != mode)
-                element = element.nextSibling;
+            var element = document.querySelector('p.nextprev a[rel]');
             if (element && element.innerHTML == mode) {
-                if (setCursorToLastPosition)
-                    createCookie('jumpToLast', '1', 0);
+                if (setCursorToLastPosition) {
+                    createCookie && createCookie('jumpToLast', '1', 0);
+                }
                 location.href = element.getAttribute('href');
             }
         },
 
         showCursor: function(i) {
-            if (i<0) return false;
+            if (i < 0) return false;
             this.hideCursor(this.current);
 
-            row = this.things[i];
-            numbercol = row.firstChild;
-            if (numbercol.innerHTML != '') {
-                numbercol.style.color = 'black';
-                numbercol.style.borderBottom = 'medium solid black'
-            } else {
-                midcol = numbercol.nextSibling;
-                midcol.style.borderBottom = 'medium solid black'
-            }
-            this.current = i;
+            var row = this.things[i];
+                numberNode = row.querySelector('.rank'),
+                link = this.getLink(row);
+                
+            numberNode.style.color = 'black';
+            numberNode.style.borderBottom = 'medium solid black'
 
             // move focus with cursor
-            var a = $('title_'+this.currentLinkId());
-            if (a) a.focus();
+            link && link.focus();
 
-            var offset = window.pageYOffset;
-            var innerHeight = window.innerHeight;
-            var cursorPos = this.findPos(row);
+            var offset = window.pageYOffset,
+                innerHeight = window.innerHeight,
+                cursorPos = this.findPos(row);
+                
             if ( (cursorPos < (offset + 58)) || (cursorPos > (offset+innerHeight-58))) {
                 window.scrollTo(0, cursorPos - (innerHeight/2))
             }
+            
+            this.current = i;
+        },
+        getLink: function(row) {
+            return row.querySelector('.title a.title');
+        },
+        getCommentLink: function(row) {
+            return row.querySelector('.comments');
+        },
+        getCurrentRow : function() {
+            return this.things[this.current];
         },
 
         hideCursor: function(i) {
-            row = this.things[i];
-            numbercol = row.firstChild;
+            var row = this.things[i],
+                numberNode = row.querySelector('.rank');
 
-            numbercol.style.color = 'darkgray';
-            numbercol.style.borderBottom = '';
-            numbercol.nextSibling.style.borderBottom = '';
+            numberNode.style.color = 'darkgray';
+            numberNode.style.borderBottom = 'none';
         },
 
         voteUp: function() {
-            $('up_'+this.currentLinkId()).onclick()
+            this.getCurrentRow().querySelector('.midcol .arrow.up').onclick();
         },
 
         voteDown: function() {
-            $('down_'+this.currentLinkId()).onclick()
+            this.getCurrentRow().querySelector('.midcol .arrow.down').onclick();
         },
 
         openLink: function() {
-            location.href = $('title_'+this.currentLinkId()).getAttribute('href');
+            window.location.href = this.getLink(this.getCurrentRow()).getAttribute('href');
         },
 
         openComments: function() {
-            location.href = $('comment_'+this.currentLinkId()).firstChild.getAttribute('href');
-        },
-
-        go: function(page) {
-            var element = $('topstrip').firstChild;
-            while (element.innerHTML != page)
-                element = element.nextSibling;
-            if (element && element.innerHTML == page)
-                location.href = element.getAttribute('href');
+            window.location.href = this.getCommentLink(this.getCurrentRow()).getAttribute('href');
         },
 
         goBack: function() {
             if (
-                location.href.match('comments') ||
-                location.href.match('user') 
-            ) history.back();
+                window.location.href.match('comments') ||
+                window.location.href.match('user') 
+            ) {
+                window.history.back();
+            }
         },
 
         help: function() {
@@ -425,14 +418,6 @@ function RedditSource() {
         findRowPos: function(row) {
             if (!row) return 0;
             return this.siteTablePos + row.offsetTop;
-        },
-
-        linkId: function(row) {
-            return row.id.match(/thingrow_(.*)/)[1];
-        },
-
-        currentLinkId: function() {
-            return this.linkId(this.things[this.current]);
         },
 
         addStyles: function(css) {

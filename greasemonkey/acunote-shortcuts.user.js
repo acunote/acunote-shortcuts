@@ -1009,25 +1009,30 @@ var SupportedSites = {
  *  Copyright (c) 2008 Pluron, Inc.
  *  ===========================================================
  */
-function getSource(func) {
-    var js = func.toString();
-    var i = js.indexOf('{');
-    js = js.substr(i+1, js.length - i - 2);
-    return js;
-}
-
-var s = document.createElement('script');
-var source = getSource(ShortcutsSource);
-
-for (site in SupportedSites) {
-    if (typeof(site) != 'string')
-        continue;
-    if (location.href.match(site)) {
-        source += getSource(SupportedSites[site]) + '\n window.Cursor.init();';
-        break;
+var addScript = function(ShortcutsSource) {
+    var getSource = function (func) {
+        var js = func.toString(),
+            i = js.indexOf('{');
+        js = js.substr(i + 1, js.length - i - 2);
+        return js;
+    }
+    var script = document.createElement('script'),
+        source = getSource(ShortcutsSource);
+    
+    for (site in SupportedSites) {
+        if (typeof(site) != 'string')
+            continue;
+        if (location.href.match(site)) {
+            source += getSource(SupportedSites[site]) + '\n window.Cursor.init();';
+            break;
+        }
+    }
+    
+    var text = document.createTextNode(source);
+    script.appendChild(text);
+    script.setAttribute('id','acunoteKeyboardShortcuts');
+    if (!document.getElementById('acunoteKeyboardShortcuts')) {
+        document.body.appendChild(script);
     }
 }
-
-var text = document.createTextNode(source);
-s.appendChild(text);
-document.getElementsByTagName('head')[0].appendChild(s);
+addScript(ShortcutsSource);

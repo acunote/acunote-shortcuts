@@ -52,21 +52,11 @@
 var w = null;
 //It is not necessary to use unsafeWindow for non-Firefox browsers
 //Opera & WebKit/Safari provide full access to window object;
-if (navigator.userAgent.indexOf('Firefox') != -1) {
+if (unsafeWindow) {
     w = unsafeWindow;
 } else {
     w = window;
 }
-
-function waitForLoad() {
-    if ((typeof(w.shortcutListener)=='undefined') || (typeof(w.SHORTCUTS)=='undefined')) {
-        window.setTimeout(waitForLoad, 200);
-    } else {
-        w.Cursor.init();
-    }
-}
-
-
 
 /*
  *  ===========================================================
@@ -1048,7 +1038,7 @@ for (site in SupportedSites) {
     if (typeof(site) != 'string')
         continue;
     if (location.href.match(site)) {
-        source += getSource(SupportedSites[site]);
+        source += getSource(SupportedSites[site]) + '\n window.Cursor.init();';
         break;
     }
 }
@@ -1056,5 +1046,3 @@ for (site in SupportedSites) {
 var text = document.createTextNode(source);
 s.appendChild(text);
 document.getElementsByTagName('head')[0].appendChild(s);
-
-waitForLoad();

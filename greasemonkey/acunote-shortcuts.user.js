@@ -519,7 +519,7 @@ function YCombinatorSource() {
                     var authorLink = rows[i+1].getElementsByTagName('a')[0];
                     if (authorLink) authorLink.setAttribute('id', 'author_link_'+j);
                     // set id on comments link
-                    var commentLink = rows[i+1].getElementsByTagName('a')[1];
+                    var commentLink = rows[i+1].getElementsByTagName('a')[2];
                     if (commentLink) commentLink.setAttribute('id', 'comment_link_'+j);
                 }
                 // Try to gen link to the next page

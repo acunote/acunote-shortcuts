@@ -476,8 +476,9 @@ function YCombinatorSource() {
                 '\n=== Voting ===\n' +
                 'v u - vote up\n' +
                 '\n=== Browsing ===\n' +
-                'g i - open "index" page\n' +
+                'g h - open "home" page\n' +
                 'g n - open "newest" page\n' +
+                'g j - open "jobs" page\n' +
                 '\n=== Other ===\n' +
                 '? - this help\n';
 
@@ -655,8 +656,9 @@ function YCombinatorSource() {
         },
         'u': function() { Cursor.back();},
         'g': {
-            'i': function() { location.href = '/'; },
-            'n': function() { location.href = '/newest'; }
+            'h': function() { location.href = '/'; },
+            'n': function() { location.href = '/newest'; },
+            'j': function() { location.href = '/jobs'; }
         }
     }
 }

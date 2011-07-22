@@ -82,7 +82,6 @@ function ShortcutsSource() {
             KEY_SHIFT:    16,
             KEY_CTRL:     17,
             KEY_ALT:      18,
-            KEY_ESC:      27,
             KEY_SPACE:    32,
             KEY_LEFT:     37,
             KEY_UP:       38,
@@ -94,24 +93,86 @@ function ShortcutsSource() {
             KEY_PAGEUP:   33,
             KEY_PAGEDOWN: 34
         },
-    
+        // adapted map from keycode.js
+        map : {
+            186: 59,  // ;: in IE
+            187: 61,  // =+ in IE
+            188: 44,  // ,<
+            189: 95,  // -_ in IE
+            190: 62,  // .>
+            191: 47,  // /?
+            192: 126, // `~
+            219: 91,  // {[
+            220: 92,  // \|
+            221: 93   // }]
+        },
+        // adapted map from keycode.js
+        // revesed key-value, since we need to shift char, and they need to un-shift
+        shifted : {
+            59  : 58,   // ;   -> :
+            61  : 43,   // +   -> =
+            44  : 60,   // ,   -> <
+            45  : 95,   // -   -> _
+            46  : 62,   // .   -> >
+            47  : 63,   // /   -> ?
+            192 : 96,   // ~   -> `
+            92  : 124,  // \   -> |
+            222 : 39,   // 222 -> '
+            222 : 34,   // 222 -> "
+            49  : 33,   // 1   -> !
+            50  : 64,   // 2   -> @
+            51  : 35,   // 3   -> #
+            52  : 36,   // 4   -> $
+            53  : 37,   // 5   -> %
+            54  : 94,   // 6   -> ^
+            55  : 38,   // 7   -> &
+            56  : 42,   // 8   -> *
+            57  : 40,   // 9   -> (
+            58  : 41,   // 0   -> )
+            91  : 123,  // [   -> {
+            93  : 125   // ]   -> }
+        },
+        UA : {
+            gecko   : navigator.userAgent.indexOf('Gecko') != -1, // chrome fits here
+            ie      : navigator.userAgent.indexOf('MSIE') != -1,
+            opera   : window.opera,
+            webkit  : (/Safari|Chrome/.test(navigator.userAgent)),
+            konq    : (/Konqueror/.test(navigator.userAgent))
+        },
         init: function() {
             if (!window.SHORTCUTS) return false;
             this.createStatusArea();
+            
+            // opera and webkit needs special keymap for certain symbols
+            // it produced from shifted map
+            // adapted code from keymap.js
+            if (this.UA.opera) {
+                this.map = {}, reverse = {}
+                for (var key in this.shifted) {
+                    reverse[this.shifted[key]] = key;
+                }
+                var unshift = [33, 64, 35, 36, 37, 94, 38, 42, 40, 41, 58, 43, 60, 95, 62, 63, 124, 34];
+                for (var i = 0; i < unshift.length; ++i) {
+                    this.map[unshift[i]] = reverse[unshift[i]];
+                }
+            }
+            
+            if (this.UA.konq) {
+                this.map[0]   = 45;
+                this.map[127] = 46;
+                this.map[45]  = 95;
+            }
+            
             this.setObserver();
         },
     
         isInputTarget: function(e) {
-            var target = e.target || e.srcElement;
-            if (target && target.nodeName) {
-                var targetNodeName = target.nodeName.toLowerCase();
-                if (targetNodeName == "textarea" || targetNodeName == "select" ||
-                    (targetNodeName == "input" && target.type &&
-                        (target.type.toLowerCase() == "text" ||
-                            target.type.toLowerCase() == "password"))
-                                )  {
-                    return true;
-                }
+            var target = e.target || e.srcElement,
+                targetNodeName = target.nodeName.toLowerCase();
+            if (targetNodeName == 'textarea' || targetNodeName == 'select' ||
+                (targetNodeName == 'input' && target.type &&
+                    (target.type.toLowerCase() == 'text' || target.type.toLowerCase() == 'password'))) {
+                return true;
             }
             return false;
         },
@@ -124,88 +185,124 @@ function ShortcutsSource() {
                 event.returnValue = false;
                 event.cancelBubble = true;
             }
+            return false;
         },
     
-
+    
         // shortcut notification/status area
         createStatusArea: function() {
-            var area = document.createElement('div');
-            area.setAttribute('id', 'shortcut_status');
-            area.style.display = 'none';
-            document.body.appendChild(area);
+            this.statusNode = document.createElement('div');
+            this.statusNode.setAttribute('id', 'shortcut_status');
+            this.statusNode.style.display = 'none';
+            document.body.appendChild(this.statusNode);
         },
     
         showStatus: function() {
-            document.getElementById('shortcut_status').style.display = '';
+            this.statusNode.style.display = '';
         },
     
         hideStatus: function() {
-            document.getElementById('shortcut_status').style.display = 'none';
+            this.statusNode.style.display = 'none';
         },
     
         showCombination: function() {
-            var bar = document.getElementById('shortcut_status');
-            bar.innerHTML = this.combination;
+            this.statusNode.innerHTML = this.combination;
             this.showStatus();
         },
     
-        // This method creates event observer for the whole document
-        // This is the common way of setting event observer that works 
-        // in all modern brwosers with "keypress" fix for
-        // Konqueror/Safari/KHTML borrowed from Prototype.js
+        // use keypress for Gecko and Opera and keydown for Safari, Chrome and K
+        eventType : function() {
+            return (this.UA.ie || this.UA.webkit || this.UA.konq) ? 'keydown' : 'keypress';
+        },
         setObserver: function() {
-            var name = 'keypress';
-            if (navigator.appVersion.match(/Konqueror|Safari|KHTML/) || document.detachEvent) {
-            name = 'keydown';
-            }
+            var listener = function(e) {shortcutListener.keyCollector(e)};
             if (document.addEventListener) {
-                document.addEventListener(name, function(e) {shortcutListener.keyCollector(e)}, false);
+                document.addEventListener(this.eventType(), listener, false);
             } else if (document.attachEvent) {
-                document.attachEvent('on'+name, function(e) {shortcutListener.keyCollector(e)});
+                document.attachEvent('on' + this.eventType(), listener);
             }
         },
     
         // Key press collector. Collects all keypresses into combination 
         // and checks it we have action for it
         keyCollector: function(e) {
-            // do not listen if no shortcuts defined
-            if (!window.SHORTCUTS) return false;
             // do not listen if listener was explicitly turned off
-            if (!shortcutListener.listen) return false;
-            // leave modifiers for browser
-            if (e.altKey || e.ctrlKey || e.metaKey) return false;
-            var keyCode = e.keyCode;
-            // do not listen for Ctrl, Alt, Tab, Space, Esc and others
-            for (var key in this.keys) {
-                if (e.keyCode == this.keys[key]) return false;
-            }
+            if (!shortcutListener.listen) return true;
+            
             // do not listen for functional keys
-            if (navigator.userAgent.match(/Gecko/)) {
-                if (e.keyCode >= 112 && e.keyCode <=123) return false;
+            var isFunctional = (function(e) {
+                // IE doesn't stop default F-keys actions, so it doesn't need this
+                if (!this.UA.ie) {
+                    if (!e.keyIdentifier) {
+                        // when only keyCode filled and keyCode is in a range - key is functional
+                        return (!e.which && !e.charCode && e.keyCode >= 112 && e.keyCode <= 123)
+                    } else {
+                        // in WebKit keyIdentifier is filled with FNN string
+                        return (/^F\d+$/.test(e.keyIdentifier))
+                    }
+                    
+                }
+            }).bind(this)
+            if (isFunctional(e)) return true;
+            
+            // get pressed key code
+            var code = e.which ? e.which : e.keyCode;
+            code = this.map[code] || code;
+            // shifting char manually for desired browsers
+            if (e.shiftKey && (this.UA.ie || this.UA.opera || this.UA.webkit)) {
+                code = this.shifted[code] || code;
             }
+            
+            // do not listen for Ctrl, Alt, Tab, Space and others
+            for (var key in this.keys) {
+                if (this.UA.gecko) {
+                    if ((e.keyCode && e.keyCode == this.keys[key])) return true;
+                } else {
+                    if (code == this.keys[key]) return true;
+                }
+            }
+            
+            var letter = null;
+            // adds ability to add shortcut to Esc key
+            if (code != 27) {
+                letter = String.fromCharCode(code).toLowerCase();
+            } else {
+                letter = 'Esc'
+            }
+    
             // do not listen in input/select/textarea fields
-            if (this.isInputTarget(e)) return false;
-            // get letter pressed for different browsers
-            var code = e.which ? e.which : e.keyCode
-            var letter = String.fromCharCode(code).toLowerCase();
-            if (e.shiftKey) letter = letter.toUpperCase();
-            // IE hack to support "?"
-            if (window.ie && (code == 191) && e.shiftKey) {
-                letter = '?';
+            // unless we pressed Esc or the modifier
+            if (this.isInputTarget(e) && !(letter == 'Esc' || e.altKey || e.ctrlKey || e.metaKey)) return true;
+    
+            if (e.shiftKey) {
+                letter = letter.toUpperCase()
             }
-            if (shortcutListener.process(letter)) shortcutListener.stopEvent(e);
+            if (e.altKey || e.ctrlKey || e.metaKey) {
+                letter = '-' + letter;
+            }
+            
+            if (e.altKey) {
+                letter = 'A' + letter;
+            }
+            if (e.ctrlKey) {
+                letter = 'C' + letter;
+            }
+            if (e.metaKey) {
+                letter = 'M' + letter;
+            }
+            if (shortcutListener.process(letter, e)) {
+                shortcutListener.stopEvent(e);
+            } 
         },
     
         // process keys
-        process: function(letter) {
-            if (!window.SHORTCUTS) return false;
-            if (!shortcutListener.listen) return false;
+        process: function(letter, e) {
             // if no combination then start from the begining
             if (!shortcutListener.shortcut) { shortcutListener.shortcut = SHORTCUTS; }
             // if unknown letter then say goodbye
-            if (!shortcutListener.shortcut[letter]) return false
+            if (!shortcutListener.shortcut[letter]) return false;
             if (typeof(shortcutListener.shortcut[letter]) == "function") {
-                shortcutListener.shortcut[letter]();
+                shortcutListener.shortcut[letter](e, letter);
                 shortcutListener.clearCombination();
             } else {
                 shortcutListener.shortcut = shortcutListener.shortcut[letter];
@@ -217,7 +314,7 @@ function ShortcutsSource() {
                     var d = new Date;
                     shortcutListener.lastKeypress = d.getTime();
                     // autoclear combination in 2 seconds
-                    setTimeout("shortcutListener.clearCombinationOnTimeout()", shortcutListener.clearTimeout);
+                    setTimeout(shortcutListener.clearCombinationOnTimeout, shortcutListener.clearTimeout);
                 };
             }
             return true;

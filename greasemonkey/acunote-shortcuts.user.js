@@ -613,14 +613,14 @@ function HnSource() {
                     img.setAttribute('id', 'cursor_'+j);
                     cell.insertBefore(img, cell.firstChild);
                     // Process links
-                    rowLinks = rows[i+1].getElementsByTagName('a');
+                    var rowLinks = rows[i+1].getElementsByTagName('a');
                     for(var linkIndex=0; linkIndex<rowLinks.length;linkIndex++) {
                         var rowLink = rowLinks[linkIndex];
                         var linkTarget = rowLink.getAttribute('href');
                         if (linkTarget.match('user')) {
                             // set id on author link
                             rowLink.setAttribute('id', 'author_link_'+j);
-                        } else if (linkTarger.match('item')) {
+                        } else if (linkTarget.match('item')) {
                             rowLink.setAttribute('id', 'comment_link_'+j);
                         }
                     }

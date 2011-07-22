@@ -66,14 +66,14 @@ if (typeof unsafeWindow !== 'undefined') {
  */
 function ShortcutsSource() {
     var shortcutListener = {
-
+    
         listen: true,
-
+    
         shortcut: null,
         combination: '',
         lastKeypress: 0,
         clearTimeout: 2000,
-
+    
         // Keys we don't listen 
         keys: {
             KEY_BACKSPACE: 8,
@@ -94,13 +94,13 @@ function ShortcutsSource() {
             KEY_PAGEUP:   33,
             KEY_PAGEDOWN: 34
         },
-
+    
         init: function() {
             if (!window.SHORTCUTS) return false;
             this.createStatusArea();
             this.setObserver();
         },
-
+    
         isInputTarget: function(e) {
             var target = e.target || e.srcElement;
             if (target && target.nodeName) {
@@ -115,7 +115,7 @@ function ShortcutsSource() {
             }
             return false;
         },
-
+    
         stopEvent: function(event) {
             if (event.preventDefault) {
                 event.preventDefault();
@@ -125,7 +125,7 @@ function ShortcutsSource() {
                 event.cancelBubble = true;
             }
         },
-
+    
 
         // shortcut notification/status area
         createStatusArea: function() {
@@ -134,21 +134,21 @@ function ShortcutsSource() {
             area.style.display = 'none';
             document.body.appendChild(area);
         },
-
+    
         showStatus: function() {
             document.getElementById('shortcut_status').style.display = '';
         },
-
+    
         hideStatus: function() {
             document.getElementById('shortcut_status').style.display = 'none';
         },
-
+    
         showCombination: function() {
             var bar = document.getElementById('shortcut_status');
             bar.innerHTML = this.combination;
             this.showStatus();
         },
-
+    
         // This method creates event observer for the whole document
         // This is the common way of setting event observer that works 
         // in all modern brwosers with "keypress" fix for
@@ -164,7 +164,7 @@ function ShortcutsSource() {
                 document.attachEvent('on'+name, function(e) {shortcutListener.keyCollector(e)});
             }
         },
-
+    
         // Key press collector. Collects all keypresses into combination 
         // and checks it we have action for it
         keyCollector: function(e) {
@@ -195,7 +195,7 @@ function ShortcutsSource() {
             }
             if (shortcutListener.process(letter)) shortcutListener.stopEvent(e);
         },
-
+    
         // process keys
         process: function(letter) {
             if (!window.SHORTCUTS) return false;
@@ -222,14 +222,14 @@ function ShortcutsSource() {
             }
             return true;
         },
-
+    
         // clear combination
         clearCombination: function() {
             shortcutListener.shortcut = null;
             shortcutListener.combination = '';
             this.hideStatus();
         },
-
+    
         clearCombinationOnTimeout: function() {
             var d = new Date;
             // check if last keypress was earlier than (now - clearTimeout)

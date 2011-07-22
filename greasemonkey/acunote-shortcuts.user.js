@@ -612,12 +612,18 @@ function HnSource() {
                     img.style.left = cursorLeft + 'px';
                     img.setAttribute('id', 'cursor_'+j);
                     cell.insertBefore(img, cell.firstChild);
-                    // set id on author link
-                    var authorLink = rows[i+1].getElementsByTagName('a')[0];
-                    if (authorLink) authorLink.setAttribute('id', 'author_link_'+j);
-                    // set id on comments link
-                    var commentLink = rows[i+1].getElementsByTagName('a')[2];
-                    if (commentLink) commentLink.setAttribute('id', 'comment_link_'+j);
+                    // Process links
+                    rowLinks = rows[i+1].getElementsByTagName('a');
+                    for(var linkIndex=0; linkIndex<rowLinks.length;linkIndex++) {
+                        var rowLink = rowLinks[linkIndex];
+                        var linkTarget = rowLink.getAttribute('href');
+                        if (linkTarget.match('user')) {
+                            // set id on author link
+                            rowLink.setAttribute('id', 'author_link_'+j);
+                        } else if (linkTarger.match('item')) {
+                            rowLink.setAttribute('id', 'comment_link_'+j);
+                        }
+                    }
                 }
                 // Try to gen link to the next page
                 if ((i == rows.length-1)) {

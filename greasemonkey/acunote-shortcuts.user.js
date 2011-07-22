@@ -617,10 +617,14 @@ function HnSource() {
                     for(var linkIndex=0; linkIndex<rowLinks.length;linkIndex++) {
                         var rowLink = rowLinks[linkIndex];
                         var linkTarget = rowLink.getAttribute('href');
+                        // Different users have different per-link actions
+                        // availabe on HN, so it's too dangerous to go by
+                        // position.  Instead we look at target href.
                         if (linkTarget.match('user')) {
-                            // set id on author link
+                            // author
                             rowLink.setAttribute('id', 'author_link_'+j);
                         } else if (linkTarget.match('item')) {
+                            // comments
                             rowLink.setAttribute('id', 'comment_link_'+j);
                         }
                     }

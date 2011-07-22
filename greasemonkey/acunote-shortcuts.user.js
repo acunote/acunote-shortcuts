@@ -533,7 +533,6 @@ function RedditSource() {
 
     var SHORTCUTS = {
         '?': function() { Cursor.help(); },
-        'h': function() { Cursor.help(); },
         'j': function() { Cursor.next(); },
         'k': function() { Cursor.previous(); },
         'o': function() { Cursor.openLink(); },
@@ -743,7 +742,6 @@ function HnSource() {
 
     var SHORTCUTS = {
         '?': function() { Cursor.help(); },
-        'h': function() { Cursor.help(); },
         'j': function() { Cursor.next();},
         'k': function() { Cursor.previous();},
         'O': function() { Cursor.jump('comment');},
@@ -1030,7 +1028,6 @@ function DiggSource() {
 
     var SHORTCUTS = {
         '?': function() { Cursor.help(); },
-        'h': function() { Cursor.help(); },
 
         'j': function() { Cursor.next();},
         'k': function() { Cursor.previous();},
@@ -1077,7 +1074,6 @@ function DummySource() {
 
     var SHORTCUTS = {
         '?': function() { Cursor.help(); },
-        'h': function() { Cursor.help(); },
     }
 }
 

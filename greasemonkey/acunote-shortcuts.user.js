@@ -10,8 +10,8 @@
  *  Digg             http://digg.com
  *  YCombinator News http://news.ycombinator.com
  *
- *  Shortcuts Library Copyright (c) 2007-2008 Pluron, Inc.
- *  Reddit, Digg and YCNews Scripts Copyright (c) 2008 Pluron, Inc.
+ *  Shortcuts Library Copyright (c) 2007-2011 Pluron, Inc.
+ *  Reddit, Digg and YCNews Scripts Copyright (c) 2008-2011 Pluron, Inc.
  *  Other scripts are copyright of their respective authors.
  *
  *  Permission is hereby granted, free of charge, to any person obtaining

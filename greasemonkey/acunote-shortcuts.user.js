@@ -8,10 +8,10 @@
  *  Adds keyboard navigation for:
  *  Reddit           http://reddit.com
  *  Digg             http://digg.com
- *  YCombinator News http://news.ycombinator.com
+ *  Hacker News      http://news.ycombinator.com
  *
  *  Shortcuts Library Copyright (c) 2007-2011 Pluron, Inc.
- *  Reddit, Digg and YCNews Scripts Copyright (c) 2008-2011 Pluron, Inc.
+ *  Reddit, Digg and HN Scripts Copyright (c) 2008-2011 Pluron, Inc.
  *  Other scripts are copyright of their respective authors.
  *
  *  Permission is hereby granted, free of charge, to any person obtaining
@@ -550,19 +550,19 @@ function RedditSource() {
 
 /*
  *  ===========================================================
- *  Acunote Shortcuts: YCNews Support
+ *  Acunote Shortcuts: Hacker News Support
  *  Copyright (c) 2008 Pluron, Inc.
  *  ===========================================================
  */
-function YCombinatorSource() {
-    var YCCursorImageData = "data:image/png,%89PNG%0D%0A%1A%0A%00%00%00%0DIHDR%00%00%00%09%00%00%00%0B%08%06%00%00%00%ADY%A7%1B%00%00%00%06bKGD%00%FF%00%FF%00%FF%A0%BD%A7%93%00%00%00%09pHYs%00%00%0D%3A%00%00%0D%3A%01%03%22%1E%85%00%00%00%07tIME%07%D6%0B%10%090%06%16%8E%9BU%00%00%00%1DtEXtComment%00Created%20with%20The%20GIMP%EFd%25n%00%00%00PIDAT%18%D3%8D%D0%A1%0E%C0%20%0C%84%E1%BF%E7%B0(%DE%FF%E9PXd%A7XH%B7%95%9Dl%BE%E6%9A%1A%E0l%E9c%1A!%8A%C3V%8B%3F%D0%DBv%84%FA%AA%D9%A1%B2%7B%16%14%87%B4Z%FC%88%FA%98%A6%EC%E0U%AF%13%B8Q%06%00%EC%CF%C7%2F%C8T'%AFF%81S%0A%00%00%00%00IEND%AEB%60%82"
+function HnSource() {
+    var HnCursorImageData = "data:image/png,%89PNG%0D%0A%1A%0A%00%00%00%0DIHDR%00%00%00%09%00%00%00%0B%08%06%00%00%00%ADY%A7%1B%00%00%00%06bKGD%00%FF%00%FF%00%FF%A0%BD%A7%93%00%00%00%09pHYs%00%00%0D%3A%00%00%0D%3A%01%03%22%1E%85%00%00%00%07tIME%07%D6%0B%10%090%06%16%8E%9BU%00%00%00%1DtEXtComment%00Created%20with%20The%20GIMP%EFd%25n%00%00%00PIDAT%18%D3%8D%D0%A1%0E%C0%20%0C%84%E1%BF%E7%B0(%DE%FF%E9PXd%A7XH%B7%95%9Dl%BE%E6%9A%1A%E0l%E9c%1A!%8A%C3V%8B%3F%D0%DBv%84%FA%AA%D9%A1%B2%7B%16%14%87%B4Z%FC%88%FA%98%A6%EC%E0U%AF%13%B8Q%06%00%EC%CF%C7%2F%C8T'%AFF%81S%0A%00%00%00%00IEND%AEB%60%82"
 
-    var YCCursorStyles = 
+    var HnCursorStyles = 
         '#shortcut_status { background: #f00;color: #fff;padding: 5px;position: absolute;top: 10px;right: 10px;}\n'+
         '.cursor {position:absolute; margin-top: 4px;}';
 
 
-    var YCCursorHelp =
+    var HnCursorHelp =
                 '=== Cursor Movement ===\n' +
                 'j - move cursor up\n' +
                 'k - move cursor down\n' +
@@ -587,7 +587,7 @@ function YCombinatorSource() {
         nextPageUrl: null,
 
         init: function() {
-            this.addStyles(YCCursorStyles);
+            this.addStyles(HnCursorStyles);
             var table = document.getElementsByTagName('table')[2];
             if (!table) return false;
             var cursorLeft = this.findPosX(table) - 15;
@@ -608,7 +608,7 @@ function YCombinatorSource() {
                     var cell = rows[i].cells[0];
                     var img = document.createElement('img');
                     img.className = "cursor";
-                    img.src = YCCursorImageData;
+                    img.src = HnCursorImageData;
                     img.style.display = 'none';
                     img.style.left = cursorLeft + 'px';
                     img.setAttribute('id', 'cursor_'+j);
@@ -700,7 +700,7 @@ function YCombinatorSource() {
         },
 
         help: function() {
-            alert(YCCursorHelp);
+            alert(HnCursorHelp);
         },
 
         findPosY: function (obj) {
@@ -1093,7 +1093,7 @@ function DummySource() {
  *  ===========================================================
  */
 var SupportedSites = {
-    'ycombinator':      YCombinatorSource,
+    'ycombinator':      HnSource,
     'reddit':           RedditSource,
     'digg':             DiggSource,
     'example.com':      DummySource

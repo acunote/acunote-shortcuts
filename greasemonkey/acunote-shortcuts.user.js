@@ -353,7 +353,7 @@ function RedditSource() {
         'k - move cursor down\n' +
         '\n=== Post Management ===\n' +
         'o, <Enter> - open original post\n'+
-        '<Shift>+o - open comments\n' +
+        'i - open comments\n' +
         'u - back to news list\n' +
         '\n=== Voting ===\n' +
         'v u - vote up\n' +
@@ -536,7 +536,7 @@ function RedditSource() {
         'j': function() { Cursor.next(); },
         'k': function() { Cursor.previous(); },
         'o': function() { Cursor.openLink(); },
-        'O': function() { Cursor.openComments(); },
+        'i': function() { Cursor.openComments(); },
         'u': function() { Cursor.goBack(); },
         'v': {
             'u': function() { Cursor.voteUp(); },
@@ -567,7 +567,7 @@ function HnSource() {
                 'k - move cursor down\n' +
                 '\n=== Post Management ===\n' +
                 'o, <Enter> - open original post\n'+
-                '<Shift>+o - open comments\n' +
+                'i - open comments\n' +
                 'u - back to news list\n' +
                 '\n=== Voting ===\n' +
                 'v u - vote up\n' +
@@ -754,7 +754,7 @@ function HnSource() {
         '?': function() { Cursor.help(); },
         'j': function() { Cursor.next();},
         'k': function() { Cursor.previous();},
-        'O': function() { Cursor.jump('comment');},
+        'i': function() { Cursor.jump('comment');},
         'o': function() { Cursor.jump('post');},
         'v': {
             'u': function() { Cursor.vote();}
@@ -794,7 +794,7 @@ function DiggSource() {
         'k - move cursor down\n' +
         '\n=== Post Management ===\n' +
         'o, <Enter> - open original post\n'+
-        '<Shift>+o - open comments\n' +
+        'i - open comments\n' +
         'u - back to news list\n' +
         '\n=== Voting ===\n' +
         'd, v u - vote up ("digg it")\n' +
@@ -1044,7 +1044,7 @@ function DiggSource() {
         'd': function() { Cursor.digg();},
         'o': function() { Cursor.jump('post');},
 
-        'O': function() { Cursor.jump('comments');},
+        'i': function() { Cursor.jump('comments');},
         'u': function() { Cursor.back();},
 
         'v': {

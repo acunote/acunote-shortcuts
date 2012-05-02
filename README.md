@@ -37,14 +37,12 @@ Firefox extension and Greasemonkey script to add keyboard shortcuts to hacker ne
 ## Four Simple Steps To Use Shortcuts from Pure Javascript
 
 1. <a href="https://github.com/acunote/acunote-shortcuts/tarball/master">Download</a> the archive and unpack it to your web site or application directory.
-2. Include shortcuts library and styles somewhere inside &lt;head&gt; tag.
-```html
-<script src="shortcuts.js" type="text/javascript"></script>
-<link href="shortcuts.css" type="text/css" media="screen"/>
-```
-3. Configure shortcuts as a javascript hash.
-```javascript
-<script type="text/javascript">
+2. Include shortcuts library and styles somewhere inside &lt;head&gt; tag.<pre>
+&lt;script src="shortcuts.js" type="text/javascript"&gt;&lt;/script&gt;
+&lt;link href="shortcuts.css" type="text/css" media="screen"/&gt;
+</pre>
+3. Configure shortcuts as a javascript hash.<pre>
+&lt;script type="text/javascript"&gt;
 var SHORTCUTS = {
     '<strong>h</strong>': function() { alert('Help!'); },
     '<strong>f</strong>': {
@@ -59,11 +57,10 @@ var SHORTCUTS = {
         }
     }
 }
-</script>
+&lt;/script&gt;
+</pre>
 4. Initialize keyboard shortcuts listener on page load.<pre>
-```html
-<body onload="shortcutListener.init();">
-```
+&lt;body onload="shortcutListener.init();"&gt;
 </pre>
 
 
@@ -71,8 +68,7 @@ var SHORTCUTS = {
 
 Rails helper supports global and page-specific keymaps and merges these at runtime.<br/>This way you can define global shortcuts for the whole site in the layout, and modify them as needed for specific pages. This example uses this functionality.
 
-1. Configure global shortcuts in your layout template. 
-```javascript
+1. Configure global shortcuts in your layout template. <pre>
 &lt;%
 @global_shortcuts = {
     <strong>:h</strong> =&gt;  "alert('Help!');",
@@ -83,9 +79,8 @@ Rails helper supports global and page-specific keymaps and merges these at runti
     }
 }
 %&gt;
-```
-2. Add local page shortcuts to the page template.
-```javascript
+</pre>
+2. Add local page shortcuts to the page template.<pre>
 &lt;%
 @page_shortcuts = {
     <strong>:b</strong> =&gt; {
@@ -96,19 +91,17 @@ Rails helper supports global and page-specific keymaps and merges these at runti
     }
 }
 %&gt;
-```
-3. Place <a href="https://github.com/acunote/acunote-shortcuts/raw/master/rails/helper/acunote_shortcuts_helper.rb">acunote_shortcuts_helper.rb</a> into you app/helpers directory and include it into ApplicationHelper class
-```ruby
+</pre>
+3. Place <a href="https://github.com/acunote/acunote-shortcuts/raw/master/rails/helper/acunote_shortcuts_helper.rb">acunote_shortcuts_helper.rb</a> into you app/helpers directory and include it into ApplicationHelper class<pre>
 module ApplicationHelper
     include AcunoteShortcutsHelper
 end
-```
-4. Call render_shortcuts where your javascript code is rendered
-```html
+</pre>
+4. Call render_shortcuts where your javascript code is rendered<pre>
 &lt;script type="text/javascript"&gt;
     &lt;%= render_shortcuts %&gt;
 &lt;/script&gt;
-```
+</pre>
 
 Then <strong>h</strong> and <strong>foo</strong> will be available for all the pages and one page will have additional <strong>bar</strong> and <strong>baz</strong> shortcuts.
 

@@ -100,9 +100,7 @@ Rails helper supports global and page-specific keymaps and merges these at runti
 3. Place <a href="https://github.com/acunote/acunote-shortcuts/raw/master/rails/helper/acunote_shortcuts_helper.rb">acunote_shortcuts_helper.rb</a> into you app/helpers directory and include it into ApplicationHelper class
 ```ruby
 module ApplicationHelper
-
     include AcunoteShortcutsHelper
-
 end
 ```
 4. Call render_shortcuts where your javascript code is rendered

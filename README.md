@@ -1,4 +1,4 @@
-# Acunote's Javascript Keyboard Shortcuts Framework
+# Acunote's JavaScript Keyboard Shortcuts Framework
 
 
 ## Overview
@@ -34,7 +34,7 @@ Firefox extension and Greasemonkey script to add keyboard shortcuts to hacker ne
 *   Open Source, MIT license.
 
 
-## Four Simple Steps To Use Shortcuts from Pure Javascript
+## Four Simple Steps To Use Shortcuts from Pure JavaScript
 
 1. <a href="https://github.com/acunote/acunote-shortcuts/tarball/master">Download</a> the archive and unpack it to your web site or application directory.
 2. Include shortcuts library and styles somewhere inside &lt;head&gt; tag.<pre>

@@ -303,7 +303,7 @@ To add support for a new site:
 ## Acunote: Powered by Shortcuts
 
 <a href="/">Acunote</a>, our project management software, is the best way to see Acunote Shortcuts library in action. Just about everything is accessible through keyboard.  Acunote also includes more keyboard features, which will be extracted into the library in the future - advanced list selector (like keyboard feed selector in Google Reader or QuickSilver), Esc listeners, accesskey-based shortcuts, etc.
-<img src="http://www.acunote.com/images/shortcuts_screenshot.png" />
+<img src="http://www.acunote.com/images/external/shortcuts_screenshot.png" />
 
 <a href="http://www.acunote.com">Learn more...</a>
 

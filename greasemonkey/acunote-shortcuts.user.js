@@ -9,6 +9,7 @@
  *  Reddit           http://reddit.com
  *  Digg             http://digg.com
  *  Hacker News      http://news.ycombinator.com
+ *  Redmine          http://www.redmine.org
  *
  *  Shortcuts Library Copyright (c) 2007-2011 Pluron, Inc.
  *  Reddit, Digg and HN Scripts Copyright (c) 2008-2011 Pluron, Inc.
@@ -46,6 +47,7 @@
 // @include       http://digg.com*
 // @include       http://www.digg.com*
 // @include       http://example.com*
+// @include       http://www.redmine.org*
 // ==/UserScript==
 
 
@@ -1088,6 +1090,116 @@ function DummySource() {
 }
 
 
+/*
+ *  ===========================================================
+ *  Shortcuts Library: Redmine Script
+ *  Copyright (c) 2012 Jordi Beltran
+ *  ===========================================================
+ */
+function RedmineSource() {
+    
+    var CursorHelp =
+        '=== Cursor Movement ===\n' +
+        'j - move cursor up\n' +
+        'k - move cursor down\n' +
+        'o - open issue\n' +
+        '\n=== Browsing ===\n' +
+        'g p - open "projects" page\n' +
+        'g i - open "issues" page\n' +
+        'g c - open "new issue" page\n' +
+        'g a - open "activity" page\n' +
+        'g s - open "summary" page\n' +
+        'g n - open "news" page\n' +
+        'g f - open "forum" page\n' +
+        'g l - open "files" page\n' +
+        'g r - open "repository" page\n' +
+        'g o - open "roadmap" page\n' +
+        '\n=== Other ===\n' +
+        's - goto search box\n' +
+        '? - this help\n';
+    var selectors = {
+        table: "table.list.issues",
+        issue: ".issue",
+        highlighted_issue: ".focused",
+        highlighted_class: "focused"
+    }
+    var Cursor = {
+
+        init: function() {
+            shortcutListener.init();
+            $$("head").first().insert({bottom:
+                "<style>table.issues .focused{border:2px solid #2A5685}</style>"
+            });
+        },
+
+        help: function() {
+            alert(CursorHelp);
+        },
+        //Warning: Using Prototype already loaded on redmine page
+        jumpToLink: function(selector){
+            location.href = $$(selector).first().href;
+        },
+        
+        focusOn: function(selector){
+            $$(selector).first().focus();
+        },
+        getCurr: function(){
+          return $$(selectors.table).first().select(selectors.highlighted_issue).first();
+        },
+        //Bidirectional navigation give dir the direction and it calls the corresponding
+        //Prototype element method
+        goDir: function(dir){
+            var curr = Cursor.getCurr();
+            var next = null;
+            if( curr ){
+                curr.removeClassName(selectors.highlighted_class);
+                next = curr[dir](selectors.issue);
+            }else{
+                next = $$(selectors.table + " "+ selectors.issue).first();
+            }
+            if( next ) next.addClassName(selectors.highlighted_class);
+            return next;
+        },
+        goNext: function(){
+            Cursor.goDir("next");
+        },
+        goPrev: function(){
+            Cursor.goDir("previous");
+        },
+        goFocusedIssue: function(){
+            var curr = Cursor.getCurr();
+            if(curr){
+                //Notice: We expect that the tr has an id="issue-1234"
+                location.href="/issues/"+curr.id.split("-")[1];
+            }
+        }
+
+    }
+    
+    var SHORTCUTS = {
+        '?': function() {Cursor.help();},
+        's': function() { Cursor.focusOn("#q"); },
+        
+        'j': function() { Cursor.goPrev(); },
+        'k': function() { Cursor.goNext(); },
+        'o': function() { Cursor.goFocusedIssue(); },
+        
+        'g': {
+            'p': function() {location.href = '/projects';},
+            'i': function() { Cursor.jumpToLink(".issues"); },
+            'c': function() { Cursor.jumpToLink(".new-issue"); },
+            'a': function() { Cursor.jumpToLink(".activity"); },
+            's': function() { Cursor.jumpToLink(".summary"); },
+            'n': function() { Cursor.jumpToLink(".news"); },
+            'f': function() { Cursor.jumpToLink(".forum"); },
+            'l': function() { Cursor.jumpToLink(".files"); },
+            'r': function() { Cursor.jumpToLink(".repository"); },
+            'o': function() { Cursor.jumpToLink(".roadmap"); },
+            'w': function() { Cursor.jumpToLink(".wiki"); },
+            't': function() { Cursor.jumpToLink(".settings"); }
+        }
+    };
+}
 
 
 /*
@@ -1102,11 +1214,27 @@ var SupportedSites = {
     'ycombinator':      HnSource,
     'reddit':           RedditSource,
     'digg':             DiggSource,
-    'example.com':      DummySource
+    'example.com':      DummySource,
+    'redmine.org':      RedmineSource
 }
 
-
-
+//Allow any domain hosting a redmine instance to use it
+// You need to allow this userscript on the domain. 
+// In firefox you configure the script in the user config.
+// Dirty hack search for the description metatag.
+try{
+    var item, list = document.getElementsByTagName("meta");
+    for(var i = 0;i < list.length; i++){
+        item = list[i];
+        if( item.getAttribute("name") == "description" && 
+                item.getAttribute("content") == "Redmine"){
+            SupportedSites[location.hostname] = RedmineSource;
+            break;
+        }
+    }
+}catch(e){
+    console.error(e);
+}
 
 /*
  *  ===========================================================

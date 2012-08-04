@@ -39,7 +39,7 @@
 //
 // ==UserScript==
 // @name          Acunote Shortcuts
-// @description   Adds cursor and keyboard shortcuts for news.ycombinator.com, reddit.com, and digg.com
+// @description   Adds cursor and keyboard shortcuts for news.ycombinator.com, reddit.com, digg.com and redmine.org
 // @include       http://news.ycombinator.org*
 // @include       http://news.ycombinator.com*
 // @include       http://reddit.com*
@@ -1214,8 +1214,8 @@ var SupportedSites = {
     'ycombinator':      HnSource,
     'reddit':           RedditSource,
     'digg':             DiggSource,
-    'example.com':      DummySource,
-    'redmine.org':      RedmineSource
+    'redmine.org':      RedmineSource,
+    'example.com':      DummySource
 }
 
 //Allow any domain hosting a redmine instance to use it
@@ -1233,7 +1233,7 @@ try{
         }
     }
 }catch(e){
-    console.error(e);
+    if(console) console.error(e);
 }
 
 /*

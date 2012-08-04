@@ -1117,18 +1117,42 @@ function RedmineSource() {
         '\n=== Other ===\n' +
         's - goto search box\n' +
         '? - this help\n';
+    // Defines how to find the lists of items and search results
+    // The link function recieve the current item selected by the "item" selector
     var selectors = {
-        table: "table.list.issues",
-        issue: ".issue",
-        highlighted_issue: ".focused",
+        issues:{
+            list: "table.list.issues",
+            item: ".issue",
+            link: function(current){
+                //Notice: We expect that the tr has an id="issue-1234"
+                return "/issues/"+current.id.split("-")[1];
+            }
+        },
+        search:{
+            list: "#search-results",
+            item: "dt",
+            link: function(current){
+                return $(current).down("a").href;
+            }
+        },
+        highlighted: ".focused",
         highlighted_class: "focused"
     }
     var Cursor = {
 
         init: function() {
             shortcutListener.init();
+            
+            //Add styles
+            var ctx, style_rules = [];
+            for(var ctx_name in selectors){
+                ctx = selectors[ctx_name];
+                if( ctx.list ){
+                    style_rules.push( ctx.list + " " + ctx.item + selectors.highlighted);
+                }
+            }
             $$("head").first().insert({bottom:
-                "<style>table.issues .focused{border:2px solid #2A5685}</style>"
+                "<style>"+ style_rules.join(", ") + " {border:2px solid #2A5685}</style>"
             });
         },
 
@@ -1143,21 +1167,28 @@ function RedmineSource() {
         focusOn: function(selector){
             $$(selector).first().focus();
         },
-        getCurr: function(){
-          return $$(selectors.table).first().select(selectors.highlighted_issue).first();
+        getCurr: function(ctx){
+          return $$(selectors[ctx].list).first().select(selectors.highlighted).first();
         },
-        //Bidirectional navigation give dir the direction and it calls the corresponding
-        //Prototype element method
+        //Bidirectional navigation give dir the direction and it calls the 
+        //corresponding Prototype element method
         goDir: function(dir){
-            var curr = Cursor.getCurr();
-            var next = null;
+            var next = null, ctx = Cursor.getListCtx();
+            var curr = Cursor.getCurr(ctx);
+            console.log("curr is ", curr);
             if( curr ){
                 curr.removeClassName(selectors.highlighted_class);
-                next = curr[dir](selectors.issue);
+                next = curr[dir](selectors[ctx].item);
             }else{
-                next = $$(selectors.table + " "+ selectors.issue).first();
+                next = $$(selectors[ctx].list + " "+ selectors[ctx].item).first();
             }
-            if( next ) next.addClassName(selectors.highlighted_class);
+            console.log("next is ",next);
+            if( next ){
+                next.addClassName(selectors.highlighted_class);
+                if( !Cursor.elementInViewport(next) ){
+                    Element.scrollTo(next);
+                }
+            }
             return next;
         },
         goNext: function(){
@@ -1166,14 +1197,25 @@ function RedmineSource() {
         goPrev: function(){
             Cursor.goDir("previous");
         },
-        goFocusedIssue: function(){
-            var curr = Cursor.getCurr();
-            if(curr){
-                //Notice: We expect that the tr has an id="issue-1234"
-                location.href="/issues/"+curr.id.split("-")[1];
-            }
-        }
+        getListCtx: function(){
+            return ( $$(selectors.search.list) ? "search" : "issues");
+        },
+        goFocusedItem: function(){
+            var curr, ctx = Cursor.getListCtx();
+            curr = Cursor.getCurr(ctx);
+            if(curr) location.href = selectors[ctx].link(curr);
+        },
+        // from http://stackoverflow.com/questions/123999/how-to-tell-if-a-dom-element-is-visible-in-the-current-viewport
+        elementInViewport:function (el) {
+            var rect = el.getBoundingClientRect();
 
+            return (
+                rect.top >= 0 &&
+                rect.left >= 0 &&
+                rect.bottom <= window.innerHeight &&
+                rect.right <= window.innerWidth 
+                );
+        }
     }
     
     var SHORTCUTS = {
@@ -1182,7 +1224,7 @@ function RedmineSource() {
         
         'j': function() { Cursor.goPrev(); },
         'k': function() { Cursor.goNext(); },
-        'o': function() { Cursor.goFocusedIssue(); },
+        'o': function() { Cursor.goFocusedItem(); },
         
         'g': {
             'p': function() {location.href = '/projects';},

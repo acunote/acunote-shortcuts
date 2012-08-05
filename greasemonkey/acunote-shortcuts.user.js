@@ -1117,6 +1117,7 @@ function RedmineSource() {
         '\n=== Other ===\n' +
         's - goto search box\n' +
         '? - this help\n';
+    
     // Defines how to find the lists of items and search results
     // The link function recieve the current item selected by the "item" selector
     var selectors = {
@@ -1126,6 +1127,37 @@ function RedmineSource() {
             link: function(current){
                 //Notice: We expect that the tr has an id="issue-1234"
                 return "/issues/"+current.id.split("-")[1];
+            },
+            next_page_link: function(){
+                // Bad luck, Redmine guys did not set a rel=prev and next on them
+                var cand = $$("#content .pagination a").last();
+                //Filter in case last link was another piece
+                if( cand.href.indexOf(location.pathname) != -1){
+                    if( selectors.issues.compare_pages( cand.href, location.href) == 1){
+                        return cand.href;
+                    }
+                }
+            },
+            previous_page_link: function(){
+                var cand = $$("#content .pagination a").first();
+                //Filter in case last link was another piece
+                if( cand && cand.href.indexOf(location.pathname) != -1){
+                    if( selectors.issues.compare_pages( cand.href, location.href ) == -1){
+                        return cand.href;
+                    }
+                }
+            },
+            page_num: function(url){
+                var m = url.match("(?:&|\\?)page=(\\d+)");
+                return ( m ? (m[1] * 1) : null );
+            },
+            // 1 : a>b
+            // 0 : a=b
+            //-1 : a<b
+            compare_pages: function(a, b){
+                var anum = selectors.issues.page_num(a),
+                  bnum = selectors.issues.page_num(b);
+                return ( anum > bnum ? 1 : (anum === bnum ? 0 : -1 ));
             }
         },
         search:{
@@ -1133,6 +1165,22 @@ function RedmineSource() {
             item: "dt",
             link: function(current){
                 return $(current).down("a").href;
+            },
+            next_page_link: function(){
+                // Bad luck, Redmine guys did not set a rel=prev and next on them
+                var cand = $$("#content a").last();
+                //Filter in case last link was another piece
+                if( cand.href.indexOf(location.pathname) != -1){
+                    return cand.href;
+                }
+            },
+            previous_page_link: function(){
+                var cand = $$("#content a");
+                cand = cand[cand.length-2];
+                //Filter in case last link was another piece
+                if( cand && cand.href.indexOf(location.pathname) != -1){
+                    return cand.href;
+                }
             }
         },
         highlighted: ".focused",
@@ -1161,35 +1209,50 @@ function RedmineSource() {
         },
         //Warning: Using Prototype already loaded on redmine page
         jumpToLink: function(selector){
-            location.href = $$(selector).first().href;
+            Cursor.goToURL( $$(selector).first().href );
         },
         
         focusOn: function(selector){
             $$(selector).first().focus();
         },
         getCurr: function(ctx){
-          return $$(selectors[ctx].list).first().select(selectors.highlighted).first();
+            return $$(selectors[ctx].list).first().select(selectors.highlighted).first();
         },
         //Bidirectional navigation give dir the direction and it calls the 
         //corresponding Prototype element method
         goDir: function(dir){
-            var next = null, ctx = Cursor.getListCtx();
+            var next, list, ctx = Cursor.getListCtx();
             var curr = Cursor.getCurr(ctx);
-            console.log("curr is ", curr);
             if( curr ){
-                curr.removeClassName(selectors.highlighted_class);
                 next = curr[dir](selectors[ctx].item);
             }else{
-                next = $$(selectors[ctx].list + " "+ selectors[ctx].item).first();
+                list = $$(selectors[ctx].list + " "+ selectors[ctx].item);
+                if(dir == "next"){
+                    next = list.first();
+                }else{
+                    next = list.last();
+                }
             }
-            console.log("next is ",next);
             if( next ){
+                if( curr ){ 
+                    curr.removeClassName(selectors.highlighted_class);
+                }
                 next.addClassName(selectors.highlighted_class);
                 if( !Cursor.elementInViewport(next) ){
                     Element.scrollTo(next);
                 }
+            }else{
+                //Try to go next page
+                Cursor.goNextPage(dir, ctx);
             }
             return next;
+        },
+        goNextPage: function(dir,ctx){
+            var link, next_page_func = selectors[ctx][dir+"_page_link"];
+            if( next_page_func ){
+                link = next_page_func();
+                if( link ) Cursor.goToURL(link);
+            }
         },
         goNext: function(){
             Cursor.goDir("next");
@@ -1198,12 +1261,12 @@ function RedmineSource() {
             Cursor.goDir("previous");
         },
         getListCtx: function(){
-            return ( $$(selectors.search.list) ? "search" : "issues");
+            return ( $$(selectors.search.list).first() ? "search" : "issues");
         },
         goFocusedItem: function(){
             var curr, ctx = Cursor.getListCtx();
             curr = Cursor.getCurr(ctx);
-            if(curr) location.href = selectors[ctx].link(curr);
+            if(curr) Cursor.goToURL(selectors[ctx].link(curr));
         },
         // from http://stackoverflow.com/questions/123999/how-to-tell-if-a-dom-element-is-visible-in-the-current-viewport
         elementInViewport:function (el) {
@@ -1215,6 +1278,9 @@ function RedmineSource() {
                 rect.bottom <= window.innerHeight &&
                 rect.right <= window.innerWidth 
                 );
+        },
+        goToURL: function(url){
+            location.href = url;
         }
     }
     

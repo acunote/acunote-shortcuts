@@ -9,7 +9,7 @@ Acunote Shortcuts was extracted from Acunote, an <a href="http://www.acunote.com
 
 
 ## Try It
-Firefox extension and Greasemonkey script to add keyboard shortcuts to hacker news (news.ycombinator.com), reddit and digg:
+Firefox extension and Greasemonkey script to add keyboard shortcuts to hacker news (news.ycombinator.com), reddit, digg and Redmine:
 * [Mozilla Firefox Extension](https://github.com/acunote/acunote-shortcuts/raw/master/extension/acunote-shortcuts.xpi)
 * [Greasemonkey Script](https://github.com/acunote/acunote-shortcuts/raw/master/greasemonkey/acunote-shortcuts.user.js)
 
@@ -30,7 +30,7 @@ Firefox extension and Greasemonkey script to add keyboard shortcuts to hacker ne
     shortcuts from Ruby. Global and page-specific keymap are supported
     and are merged at the runtime.
 *   Greasemonkey userscript with an examples of using adding shortcuts
-    to News.YC, Reddit and Digg. Includes code to add Gmail-style cursor.
+    to News.YC, Reddit, Digg and Redmine. Includes code to add Gmail-style cursor.
 *   Open Source, MIT license.
 
 
@@ -105,9 +105,9 @@ end
 
 Then <strong>h</strong> and <strong>foo</strong> will be available for all the pages and one page will have additional <strong>bar</strong> and <strong>baz</strong> shortcuts.
 
-## News.YC, Reddit, Digg Keyboard Shortcuts For Your Browser
+## News.YC, Reddit, Digg and Redmine Keyboard Shortcuts For Your Browser
 This Firefox Extension and Greasemonkey Script add Gmail-style cursor, navigation and post
-management shortcuts to <a class="external" href="http://news.ycombinator.com">YCombinator News</a>, <a class="external" href="http://reddit.com">Reddit</a> and <a class="external" href="http://digg.com">Digg</a>. It includes <span class="nowrap">aconote-shortcuts.js</span> library, and site-specific code to setup shortcuts for each of these.</p>
+management shortcuts to <a class="external" href="http://news.ycombinator.com">YCombinator News</a>, <a class="external" href="http://reddit.com">Reddit</a>, <a class="external" href="http://digg.com">Digg</a> and <a class="external" href="http://www.redmine.org">Redmine</a>. It includes <span class="nowrap">aconote-shortcuts.js</span> library, and site-specific code to setup shortcuts for each of these.</p>
 
 <table style="border-collapse:collapse" border="1px" cellpadding="0" cellspacing="0" width="100%">
 <tr>
@@ -270,6 +270,139 @@ management shortcuts to <a class="external" href="http://news.ycombinator.com">Y
     </td>
     <td>
         Reddit
+    </td>
+</tr>
+<tr>
+    <td class="shortcut">
+        <strong>?</strong>
+    </td>
+    <td class="action">
+        show help
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <th colspan="3">Redmine specific</th>
+</tr>
+<tr>
+    <td class="shortcut">
+        <strong>g</strong> then <strong>p</strong>
+    </td>
+    <td class="action">
+        open "projects" page
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="shortcut">
+        <strong>g</strong> then <strong>i</strong>
+    </td>
+    <td class="action">
+        open "issues" page
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="shortcut">
+        <strong>g</strong> then <strong>c</strong>
+    </td>
+    <td class="action">
+        open "new issue" form
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="shortcut">
+        <strong>g</strong> then <strong>a</strong>
+    </td>
+    <td class="action">
+        open "activity" page
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="shortcut">
+        <strong>g</strong> then <strong>s</strong>
+    </td>
+    <td class="action">
+        open "summary" page
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="shortcut">
+        <strong>g</strong> then <strong>n</strong>
+    </td>
+    <td class="action">
+        open "news" page
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="shortcut">
+        <strong>g</strong> then <strong>f</strong>
+    </td>
+    <td class="action">
+        open "forum" page
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="shortcut">
+        <strong>g</strong> then <strong>l</strong>
+    </td>
+    <td class="action">
+        open "files" page
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="shortcut">
+        <strong>g</strong> then <strong>r</strong>
+    </td>
+    <td class="action">
+        open "repository" page
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="shortcut">
+        <strong>g</strong> then <strong>o</strong>
+    </td>
+    <td class="action">
+        open "roadmap" page
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="shortcut">
+        <strong>g</strong> then <strong>w</strong>
+    </td>
+    <td class="action">
+        open "wiki" page
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="shortcut">
+        <strong>g</strong> then <strong>t</strong>
+    </td>
+    <td class="action">
+        open "settings" page
+    </td>
+    <td>
     </td>
 </tr>
 <tr>

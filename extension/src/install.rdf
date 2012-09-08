@@ -6,7 +6,7 @@
     <em:name>Acunote Shortcuts</em:name>
     <em:version>0.2</em:version>
     <em:creator>Pluron, Inc.</em:creator>
-    <em:description>Adds cursor and keyboard shortcuts for news.ycombinator.org, reddit.com, and digg.com</em:description>
+    <em:description>Adds cursor and keyboard shortcuts for news.ycombinator.org, reddit.com, digg.com and redmine.org</em:description>
     <em:homepageURL>http://www.acunote.com/open-source/javascript-keyboard-shortcuts</em:homepageURL>
     <em:updateURL>https://www.acunote.com/files/update.rdf</em:updateURL>
     <em:targetApplication>

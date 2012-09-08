@@ -1326,7 +1326,7 @@ var SupportedSites = {
     'example.com':      DummySource
 }
 
-//Allow any domain hosting a redmine instance to use it
+// Allow any domain hosting a redmine instance to use it
 // You need to allow this userscript on the domain. 
 // In firefox you configure the script in the user config.
 // Dirty hack search for the description metatag.

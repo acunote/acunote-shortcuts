@@ -41,7 +41,9 @@
 // @name          Acunote Shortcuts
 // @description   Adds cursor and keyboard shortcuts for news.ycombinator.com, reddit.com, digg.com and redmine.org
 // @include       http://news.ycombinator.org*
+// @include       https://news.ycombinator.org*
 // @include       http://news.ycombinator.com*
+// @include       https://news.ycombinator.com*
 // @include       http://reddit.com*
 // @include       http://www.reddit.com*
 // @include       http://digg.com*

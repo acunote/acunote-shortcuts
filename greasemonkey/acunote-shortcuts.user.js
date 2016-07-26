@@ -237,12 +237,13 @@ function ShortcutsSource() {
             var isFunctional = (function(e) {
                 // IE doesn't stop default F-keys actions, so it doesn't need this
                 if (!this.UA.ie) {
-                    if (!e.keyIdentifier) {
+                    if (!e.key) {
                         // when only keyCode filled and keyCode is in a range - key is functional
                         return (!e.which && !e.charCode && e.keyCode >= 112 && e.keyCode <= 123)
                     } else {
-                        // in WebKit keyIdentifier is filled with FNN string
-                        return (/^F\d+$/.test(e.keyIdentifier))
+                        // in modern browsers KeyboardEvent.key is filled with FNN string
+                        // https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/key
+                        return (/^F\d+$/.test(e.key))
                     }
                     
                 }
